@@ -448,6 +448,8 @@ input[type=range]{width:100%;accent-color:var(--amber-2);height:6px;cursor:point
 .c-card b{display:block;font-size:15px;color:var(--navy);margin-bottom:2px}
 .c-card a,.c-card span{color:var(--muted);font-size:14.5px}
 .c-card a:hover{color:var(--amber-2)}
+.c-card .phones{display:flex;flex-direction:column;gap:3px}
+.c-card .phones a{white-space:nowrap}
 .contact-form{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:34px}
 .contact-form h3{font-size:19px;color:var(--navy);margin-bottom:6px}
 .contact-form .cap{color:var(--muted);font-size:13.5px;margin-bottom:22px}
@@ -465,6 +467,7 @@ footer{background:var(--navy-2);color:#c3d6c8;padding:64px 0 0}
 .foot-brand .brand{color:var(--amber);margin-bottom:4px}
 .foot-col h4{color:#fff;font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
 .foot-col ul{list-style:none;display:grid;gap:11px}
+.foot-col .foot-phones{display:grid;gap:3px}
 .foot-col a{font-size:14px;color:#b4cfba}
 .foot-col a:hover{color:var(--amber)}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.09);padding:22px max(30px,env(safe-area-inset-left));display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:13px;color:#93ad9a}
@@ -952,7 +955,7 @@ footer{background:var(--navy-2);color:#c3d6c8;padding:64px 0 0}
       </div>
       <div class="c-card">
         <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
-        <div><b>Call / WhatsApp</b><a id="phoneCardLink"></a></div>
+        <div><b>Call / WhatsApp</b><div class="phones" id="phoneCardCtn"></div></div>
       </div>
 <!--      <div class="c-card">
         <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg></span>
@@ -1026,7 +1029,7 @@ footer{background:var(--navy-2);color:#c3d6c8;padding:64px 0 0}
       <h4>Get in touch</h4>
       <ul>
         <li><a id="emailFooter"></a></li>
-        <li><a id="phoneFooter"></a></li>
+       <li class="foot-phones" id="phoneFootCtn"></li>
         <li><a href="#contact">Book a free assessment</a></li>
       </ul>
     </div>
@@ -1248,16 +1251,21 @@ var SITE = {
     if (emailFoot){ emailFoot.href = 'mailto:' + SITE.contact.email; emailFoot.textContent = SITE.contact.email; }
     var succEm = document.getElementById('successEmail');
     if (succEm) succEm.textContent = SITE.contact.email;
-    var phoneLink = document.getElementById('phoneCardLink');
-    if (phoneLink){ phoneLink.href = 'tel:' + SITE.contact.phoneHref; phoneLink.textContent = SITE.contact.phone; }
-    var phoneFoot = document.getElementById('phoneFooter');
-    if (phoneFoot){ phoneFoot.href = 'tel:' + SITE.contact.phoneHref; phoneFoot.textContent = SITE.contact.phone; }
+    var phoneLink = document.getElementById('phoneCardCtn');
+var phoneFoot = document.getElementById('phoneFootCtn');
+function renderPhones(ctn){
+  if (!ctn) return;
+  var nums = Array.isArray(SITE.contact.phone) ? SITE.contact.phone : (SITE.contact.phone ? [SITE.contact.phone] : []);
+  ctn.innerHTML = nums.map(function(n){ return '<a href="tel:' + String(n).replace(/[^\d+]/g,'') + '">' + esc(n) + '</a>'; }).join('');
+}
+renderPhones(phoneLink);
+renderPhones(phoneFoot);
     var addr = document.getElementById('addressText');
     if (addr) addr.innerHTML = SITE.contact.address.map(esc).join('<br>');
     var hrs = document.getElementById('hoursText');
     if (hrs) hrs.textContent = SITE.contact.hours;
     var cfPhone = document.getElementById('cfPhone');
-    if (cfPhone) cfPhone.placeholder = SITE.contact.phone;
+    if (cfPhone) cfPhone.placeholder = (Array.isArray(SITE.contact.phone) ? SITE.contact.phone[0] : SITE.contact.phone) || '';
     var cfCity = document.getElementById('cfCity');
     if (cfCity) cfCity.placeholder = SITE.contact.cityPlaceholder;
 
