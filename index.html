@@ -183,6 +183,23 @@ nav#siteNav.scrolled{
 .gal-cap{position:absolute;inset:auto 0 0 0;background:linear-gradient(to top,rgba(8,42,29,.92),rgba(8,42,29,0));padding:40px 18px 14px;font-size:12.5px;color:#e6f0ea;font-weight:600;line-height:1.45}
 .gal-note{margin-top:18px;font-size:13px;color:#9db4cc}
 #credentials,#installations{scroll-margin-top:84px}
+/* suryagarh photo carousel */
+.carousel{margin-top:30px}
+.car-frame{position:relative}
+.car-track{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04)}
+.car-slide{position:absolute;inset:0;margin:0;opacity:0;visibility:hidden;transition:opacity .7s,visibility 0s .7s;cursor:zoom-in}
+.car-slide.active{opacity:1;visibility:visible;transition:opacity .7s}
+.car-slide img{width:100%;height:100%;object-fit:cover;filter:saturate(.95) contrast(1.02)}
+.car-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(8,42,29,.6),rgba(8,42,29,0) 42%)}
+.car-cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:52px 20px 16px;font-size:13.5px;color:#e6f0ea;font-weight:600;text-align:center;letter-spacing:.02em;line-height:1.5}
+.car-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:46px;height:46px;border-radius:50%;background:rgba(8,42,29,.55);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:24px;line-height:1;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(3px);transition:background .2s,color .2s,transform .2s;font-family:inherit}
+.car-arrow:hover{background:rgba(254,178,60,.9);border-color:transparent;color:#082a1d}
+.car-prev{left:14px}
+.car-next{right:14px}
+.car-dots{display:flex;justify-content:center;align-items:center;gap:9px;margin-top:16px;flex-wrap:wrap}
+.car-dot{width:9px;height:9px;border-radius:999px;background:rgba(255,255,255,.28);border:none;cursor:pointer;padding:0;transition:background .25s,width .25s}
+.car-dot.active{background:var(--amber);width:26px}
+.car-count{text-align:center;margin-top:10px;font-size:12px;color:#9db4cc;letter-spacing:.06em;font-variant-numeric:tabular-nums}
 /* lightbox */
 .lightbox{position:fixed;inset:0;z-index:200;background:rgba(6,20,14,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s;padding:34px}
 .lightbox.open{opacity:1;visibility:visible;transition:opacity .25s,visibility 0s}
@@ -501,6 +518,9 @@ footer{background:var(--navy-2);color:#c3d6c8;padding:64px 0 0}
 }
 @media (max-width:600px){
   .cred-grid,.gallery-grid{grid-template-columns:1fr}
+  .car-arrow{width:36px;height:36px;font-size:19px}
+  .car-prev{left:8px}
+  .car-next{right:8px}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
@@ -579,6 +599,19 @@ footer{background:var(--navy-2);color:#c3d6c8;padding:64px 0 0}
       <div class="sury-block-head"><h3 id="credTitle"></h3></div>
       <p class="sury-block-sub" id="credSub"></p>
       <div class="cred-grid" id="credGrid"></div>
+    </div>
+    <div class="sury-block" id="suryagarhGallery">
+      <div class="sury-block-head"><h3 id="suryGalTitle"></h3></div>
+      <p class="sury-block-sub" id="suryGalSub"></p>
+      <div class="carousel">
+        <div class="car-frame">
+          <button class="car-arrow car-prev" id="carPrev" type="button" aria-label="Previous photo">‹</button>
+          <div class="car-track" id="carTrack"></div>
+          <button class="car-arrow car-next" id="carNext" type="button" aria-label="Next photo">›</button>
+        </div>
+        <div class="car-dots" id="carDots"></div>
+        <div class="car-count" id="carCount"></div>
+      </div>
     </div>
     <div class="sury-block" id="installations">
       <div class="sury-block-head"><h3 id="galTitle"></h3></div>
@@ -1179,7 +1212,22 @@ var SITE = {
       { img: 'src/dev-assets/Site-2.jpg', cap: 'Rooftop canopy installation — individual project' },
       { img: 'src/dev-assets/Site-3.jpg', cap: 'Church rooftop installation — individual project' }
     ],
-    galleryNote: 'The photographs above are individual, one-off installations completed by our team. The 3,000-home PM Suryagarh programme is a separate, larger deployment spanning the Bhadrachalam area.'
+    galleryNote: 'The photographs above are individual, one-off installations completed by our team. The 3,000-home PM Suryagarh programme is a separate, larger deployment spanning the Bhadrachalam area.',
+    suryGalleryTitle: 'PM Suryagarh on the ground',
+    suryGallerySub: 'Homes across the Bhadrachalam area with their new 2 kW rooftop systems — installed under the PM Suryagarh scheme.',
+    suryGallery: [
+      { img: 'src/vana-photo-gallery/1.jpeg',  cap: 'Materials arriving at a home ahead of installation' },
+      { img: 'src/vana-photo-gallery/2.jpeg',  cap: '2 kW rooftop array beside a traditional thatched home' },
+      { img: 'src/vana-photo-gallery/3.jpeg',  cap: 'Installation team commissioning a rooftop array' },
+      { img: 'src/vana-photo-gallery/4.jpeg',  cap: 'Array installed at a forest-edge home' },
+      { img: 'src/vana-photo-gallery/5.jpeg',  cap: 'Newly installed rooftop — a proud homeowner' },
+      { img: 'src/vana-photo-gallery/6.jpeg',  cap: 'Homeowner with her new rooftop system' },
+      { img: 'src/vana-photo-gallery/7.jpeg',  cap: 'Rooftop system switched on for a rural household' },
+      { img: 'src/vana-photo-gallery/8.jpeg',  cap: 'Panels mounted on a rural dwelling' },
+      { img: 'src/vana-photo-gallery/9.jpeg',  cap: 'Installation near the forest — Bhadrachalam region' },
+      { img: 'src/vana-photo-gallery/10.jpeg', cap: 'Array commissioned in a village clearing' },
+      { img: 'src/vana-photo-gallery/11.jpeg', cap: 'Completed rooftop system at a rural home' }
+    ]
   }
 };(function(){
   /* ---- Push SITE data into the page (single source of truth) ---- */
@@ -1624,6 +1672,42 @@ var SITE = {
       + '<img src="' + esc(g.img) + '" alt="' + esc(g.cap) + '" loading="lazy">'
       + '<figcaption class="gal-cap">' + esc(g.cap) + '</figcaption></figure>';
   }).join('');
+
+  // PM Suryagarh photo carousel
+  setText('suryGalTitle', S.suryGalleryTitle);
+  setText('suryGalSub', S.suryGallerySub);
+  var carTrack = document.getElementById('carTrack');
+  var fullList = S.suryGallery.map(function(g){ return g.img; });
+  carTrack.innerHTML = S.suryGallery.map(function(g, i){
+    return '<figure class="car-slide' + (i === 0 ? ' active' : '') + '" data-lb="' + esc(JSON.stringify(fullList)) + '" data-lbcap="' + esc(g.cap) + '">'
+      + '<img src="' + esc(g.img) + '" alt="' + esc(g.cap) + '" loading="lazy">'
+      + '<figcaption class="car-cap">' + esc(g.cap) + '</figcaption></figure>';
+  }).join('');
+  var carDotsEl = document.getElementById('carDots');
+  carDotsEl.innerHTML = S.suryGallery.map(function(_, i){
+    return '<button class="car-dot' + (i === 0 ? ' active' : '') + '" type="button" aria-label="Photo ' + (i + 1) + '"></button>';
+  }).join('');
+  var slides = carTrack.children, dots = carDotsEl.children, idx = 0, carTimer = null;
+  var carCount = document.getElementById('carCount');
+  var showSlide = function(n){
+    idx = (n + slides.length) % slides.length;
+    for (var i = 0; i < slides.length; i++){
+      slides[i].classList.toggle('active', i === idx);
+      dots[i].classList.toggle('active', i === idx);
+    }
+    carCount.textContent = (idx + 1) + ' / ' + slides.length;
+  };
+  var restartAuto = function(){
+    if (carTimer) clearInterval(carTimer);
+    carTimer = setInterval(function(){ showSlide(idx + 1); }, 5000);
+  };
+  document.getElementById('carPrev').addEventListener('click', function(){ showSlide(idx - 1); restartAuto(); });
+  document.getElementById('carNext').addEventListener('click', function(){ showSlide(idx + 1); restartAuto(); });
+  for (var d = 0; d < dots.length; d++){
+    (function(di){ dots[di].addEventListener('click', function(){ showSlide(di); restartAuto(); }); })(d);
+  }
+  showSlide(0);
+  restartAuto();
 
   // Reveal + counter activation.
   // Uses setInterval/setTimeout polling instead of IntersectionObserver +
